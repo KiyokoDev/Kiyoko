@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>kiyoko</title>
+        <link rel="icon" href="KyokoHori.jpg" />
+        <style>
+            html {
+                min-height: 100%;
+            }
+            body {
+                margin: 0;
+                min-height: 100vh;
+                background: #fcf3e8;
+                user-select: none;
+                -webkit-user-select: none;
+                color: #2d2a24;
+                font-family: "Roboto Mono", monospace;
+                line-height: 1.6;
+            }
+            #bg {
+                position: fixed;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 0;
+            }
+            .wrap {
+                position: relative;
+                z-index: 1;
+                max-width: 640px;
+                margin: 0 auto;
+                padding: 40px 20px;
+            }
+            h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                margin: 0 0 5px;
+                text-align: center;
+            }
+            .box {
+                border: 1px solid #000;
+                background: #fff;
+                padding: 20px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            }
+            .box + .box {
+                margin-top: 8px;
+            }
+            .box h2 {
+                font-size: 1rem;
+                font-weight: 700;
+                margin: 0 0 10px;
+                letter-spacing: 1px;
+                text-align: center;
+            }
+            .box p,
+            .box li {
+                color: #555;
+                font-size: 0.9rem;
+            }
+            .box ul {
+                margin: 0;
+                padding-left: 20px;
+                text-align: left;
+                display: inline-block;
+            }
+            .box li {
+                margin-bottom: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="bg"></canvas>
+
+        <div class="wrap">
+            <div class="box" style="padding: 2px 8px">
+                <h1 style="margin: 0; font-size: 1.5rem">kiyoko</h1>
+            </div>
+
+            <div class="box">
+                <h2>welcome</h2>
+                <p>
+                    welcome to my little corner of the internet! i like anime,
+                    coding, and retro stuff. this is where i put things i like
+                    or things i found useful at some point in time. make
+                    yourself at home
+                </p>
+            </div>
+
+            <div class="box">
+                <h2>projects</h2>
+                <ul>
+                    <li>
+                        <strong>KiyokoBox</strong> &mdash; cloud file indexer
+                        with metadata extraction and search
+                    </li>
+                    <li>
+                        <strong>Markup Swift</strong> &mdash; custom markdown
+                        editor for linux and windows built on egui and rust
+                    </li>
+                    <li>
+                        <strong>KiMail</strong> &mdash; full email service
+                        powered by the Resend API
+                    </li>
+                </ul>
+            </div>
+
+            <div class="box">
+                <h2>skills</h2>
+                <p>
+                    <strong>Skills</strong> &mdash; Full Stack, DevOps, Data
+                    Engineering, Database Admin
+                </p>
+                <p>
+                    <strong>Languages</strong> &mdash; html/css/js, python,
+                    rust, electron, bash
+                </p>
+            </div>
+        </div>
+
+        <script>
+            const canvas = document.getElementById("bg");
+            const ctx = canvas.getContext("2d");
+
+            function drawCube(x, y, tw, th, ch) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + tw / 2, y + th / 2);
+                ctx.lineTo(x, y + th);
+                ctx.lineTo(x - tw / 2, y + th / 2);
+                ctx.closePath();
+                ctx.fillStyle = "#f3e5d4";
+                ctx.fill();
+                ctx.strokeStyle = "#e8d6c0";
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(x - tw / 2, y + th / 2);
+                ctx.lineTo(x - tw / 2, y + th / 2 + ch);
+                ctx.lineTo(x, y + th + ch);
+                ctx.lineTo(x, y + th);
+                ctx.closePath();
+                ctx.fillStyle = "#ebdac6";
+                ctx.fill();
+                ctx.strokeStyle = "#e8d6c0";
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(x, y + th);
+                ctx.lineTo(x, y + th + ch);
+                ctx.lineTo(x + tw / 2, y + th / 2 + ch);
+                ctx.lineTo(x + tw / 2, y + th / 2);
+                ctx.closePath();
+                ctx.fillStyle = "#e2cdb5";
+                ctx.fill();
+                ctx.strokeStyle = "#e8d6c0";
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+                ctx.fill();
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const tw = 40;
+                const th = 20;
+                const ch = 20;
+                const margin = 3;
+                const max = Math.max(
+                    Math.ceil(canvas.width / tw) + margin,
+                    Math.ceil(canvas.height / th) + margin,
+                );
+
+                for (let sum = -max * 2; sum <= max * 2; sum++) {
+                    for (let col = -max * 2; col <= max * 2; col++) {
+                        const row = sum - col;
+                        const x = ((col - row) * tw) / 2;
+                        const y = ((col + row) * th) / 2;
+
+                        if (
+                            x < -tw ||
+                            x > canvas.width + tw ||
+                            y < -ch - th ||
+                            y > canvas.height + ch
+                        )
+                            continue;
+
+                        drawCube(x, y, tw, th, ch);
+                    }
+                }
+            }
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                draw();
+            }
+
+            window.addEventListener("resize", resize);
+            resize();
+        </script>
+    </body>
+</html>
