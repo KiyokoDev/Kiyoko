@@ -12,12 +12,16 @@
             body {
                 margin: 0;
                 min-height: 100vh;
-                background: #fcf3e8;
+                background: #008080;
                 user-select: none;
                 -webkit-user-select: none;
-                color: #2d2a24;
+                color: #222;
                 font-family: "Roboto Mono", monospace;
                 line-height: 1.6;
+            }
+            ::selection {
+                background: #000080;
+                color: #fff;
             }
             #bg {
                 position: fixed;
@@ -27,6 +31,19 @@
                 pointer-events: none;
                 z-index: 0;
             }
+            #grain {
+                position: fixed;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 2;
+                opacity: 0.035;
+                mix-blend-mode: multiply;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+                background-repeat: repeat;
+                background-size: 256px 256px;
+            }
             .wrap {
                 position: relative;
                 z-index: 1;
@@ -35,30 +52,100 @@
                 padding: 40px 20px;
             }
             h1 {
-                font-size: 2rem;
+                font-size: 1rem;
                 font-weight: 700;
-                margin: 0 0 5px;
+                margin: 0;
                 text-align: center;
+                letter-spacing: 0;
+                text-transform: none;
+                color: #fff;
             }
             .box {
-                border: 1px solid #000;
-                background: #fff;
-                padding: 20px;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+                border: 2px solid;
+                border-color: #fff #808080 #808080 #fff;
+                background: #c0c0c0;
+                padding: 2px;
+                box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #404040;
             }
             .box + .box {
                 margin-top: 8px;
             }
-            .box h2 {
-                font-size: 1rem;
+            .box .title {
+                background: #000080;
+                color: #fff;
+                font-size: 0.85rem;
                 font-weight: 700;
-                margin: 0 0 10px;
-                letter-spacing: 1px;
-                text-align: center;
+                padding: 3px 6px;
+                margin: 0;
+                letter-spacing: 0;
+                text-transform: none;
+                text-align: left;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .box .title .title-text {
+                flex: 1;
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .box .title .buttons {
+                display: flex;
+                gap: 2px;
+                flex-shrink: 0;
+                margin-left: 4px;
+            }
+            .box .title .b {
+                display: block;
+                width: 14px;
+                height: 14px;
+                border: 1px solid;
+                border-color: #fff #808080 #808080 #fff;
+                background: #c0c0c0;
+                box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #404040;
+                cursor: default;
+                position: relative;
+            }
+            .box .title .b-min::after {
+                content: "";
+                position: absolute;
+                bottom: 2px;
+                left: 2px;
+                width: 8px;
+                height: 2px;
+                background: #222;
+            }
+            .box .title .b-max::after {
+                content: "";
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 8px;
+                height: 8px;
+                border: 2px solid #222;
+                background: #c0c0c0;
+            }
+            .box .title .b-close::after {
+                content: "";
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 8px;
+                height: 8px;
+                background: linear-gradient(45deg, transparent 0%, transparent 42%, #222 42%, #222 58%, transparent 58%, transparent 100%),
+                            linear-gradient(-45deg, transparent 0%, transparent 42%, #222 42%, #222 58%, transparent 58%, transparent 100%);
+            }
+            .box .body {
+                background: #c0c0c0;
+                padding: 12px;
+                border: 2px solid;
+                border-color: #808080 #fff #fff #808080;
             }
             .box p,
             .box li {
-                color: #555;
+                color: #222;
                 font-size: 0.9rem;
             }
             .box ul {
@@ -70,45 +157,49 @@
             .box li {
                 margin-bottom: 4px;
             }
+            .box li strong {
+                color: #000;
+            }
             #moon-wrap {
                 position: fixed;
                 top: 12px;
                 right: 12px;
                 z-index: 999;
-                border: 1px solid #c4b49a;
-                background: rgba(255,255,255,0.6);
-                padding: 6px 10px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+                border: 2px solid;
+                border-color: #fff #808080 #808080 #fff;
+                background: #c0c0c0;
+                padding: 4px;
+                box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #404040;
             }
-            #gh-icon {
+            #moon-wrap img {
+                display: block;
+            }
+            #links-wrap {
                 position: fixed;
-                top: 138px;
-                right: 14px;
+                bottom: 12px;
+                right: 12px;
                 z-index: 999;
-                width: 32px;
-                height: 32px;
-                color: #2d2a24;
-                opacity: 0.5;
-                transition: opacity .15s;
+                width: fit-content;
             }
-            #gh-icon:hover {
-                opacity: 1;
+            #links-wrap .box {
+                width: fit-content;
+                min-width: 0;
+            }
+            #links-wrap .box .body {
+                padding: 6px 8px;
             }
             @media (max-width: 640px) {
-                #moon-wrap, #gh-icon {
-                    position: static;
-                }
                 #moon-wrap {
                     display: inline-block;
                     margin: 10px 0 0;
-                    border-width: 1px;
                 }
-                #gh-icon {
-                    display: block;
-                    width: 24px;
-                    height: 24px;
-                    margin: 6px 0 0;
-                    opacity: 1;
+                #links-wrap {
+                    position: static;
+                    margin: 10px 0 0;
+                    width: auto;
+                }
+                #links-wrap .box {
+                    width: auto;
                 }
                 #oneko {
                     display: none !important;
@@ -118,39 +209,52 @@
     </head>
     <body>
         <canvas id="bg"></canvas>
+        <div id="grain"></div>
 
         <div class="wrap">
-            <div class="box" style="padding: 2px 8px">
-                <h1 style="margin: 0; font-size: 1.5rem">kiyoko</h1>
+            <div class="box">
+                <div class="title"><span class="title-text"><h1>kiyoko</h1></span><span class="buttons"><i class="b b-min"></i><i class="b b-max"></i><i class="b b-close"></i></span></div>
             </div>
 
             <div class="box">
-                <h2>welcome</h2>
-                <p>welcome to my little corner of the internet! i like anime, coding, and retro stuff. this is where i put things i like or things i found useful at some point in time. make yourself at home</p>
+                <div class="title"><span class="title-text">welcome</span><span class="buttons"><i class="b b-min"></i><i class="b b-max"></i><i class="b b-close"></i></span></div>
+                <div class="body">
+                    <p>welcome to my little corner of the internet! i like anime, coding, and retro stuff. this is where i put things i like or things i found useful at some point in time. make yourself at home</p>
+                </div>
             </div>
 
             <div class="box">
-                <h2>projects</h2>
-                <ul>
-                    <li><strong>KiyokoBox</strong> &mdash; cloud file indexer with metadata extraction and search</li>
-                    <li><strong>Markup Swift</strong> &mdash; custom markdown editor for linux and windows built on egui and rust</li>
-                    <li><strong>KiMail</strong> &mdash; full email service powered by the Resend API</li>
-                </ul>
+                <div class="title"><span class="title-text">projects</span><span class="buttons"><i class="b b-min"></i><i class="b b-max"></i><i class="b b-close"></i></span></div>
+                <div class="body">
+                    <ul>
+                        <li><strong>KiyokoBox</strong> &mdash; cloud file indexer with metadata extraction and search</li>
+                        <li><strong>Markup Swift</strong> &mdash; custom markdown editor for linux and windows built on egui and rust</li>
+                        <li><strong>KiMail</strong> &mdash; full email service powered by the Resend API</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="box">
-                <h2>skills</h2>
-                <p><strong>Skills</strong> &mdash; Full Stack, DevOps, Data Engineering, Database Admin</p>
-                <p><strong>Languages</strong> &mdash; html/css/js, python, rust, electron, bash</p>
+                <div class="title"><span class="title-text">skills</span><span class="buttons"><i class="b b-min"></i><i class="b b-max"></i><i class="b b-close"></i></span></div>
+                <div class="body">
+                    <p><strong>Skills</strong> &mdash; Full Stack, DevOps, Data Engineering, Database Admin</p>
+                    <p><strong>Languages</strong> &mdash; html/css/js, python, rust, electron, bash</p>
+                </div>
             </div>
 
             <div id="moon-wrap">
                 <img src="https://count.getloli.com/@kiyoko-dev?theme=moebooru" alt="kiyoko.dev counter" />
             </div>
 
-            <a id="gh-icon" href="https://github.com/KiyokoDev" target="_blank" aria-label="GitHub">
-                <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" /></svg>
-            </a>
+        </div>
+
+        <div id="links-wrap">
+            <div class="box">
+                <div class="title"><span class="title-text">links</span><span class="buttons"><i class="b b-min"></i><i class="b b-max"></i><i class="b b-close"></i></span></div>
+                <div class="body" style="text-align:left; white-space:nowrap">
+                    <a href="https://github.com/KiyokoDev" target="_blank" style="color:#00f; text-decoration:underline">github</a>
+                </div>
+            </div>
         </div>
 
         <script>
@@ -193,7 +297,6 @@
                 ctx.strokeStyle = "#e8d6c0";
                 ctx.lineWidth = 0.5;
                 ctx.stroke();
-                ctx.fill();
             }
 
             function draw() {
